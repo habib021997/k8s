@@ -1,15 +1,19 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "app01.fullname" . }}
+  name: {{ .Values.app_name }}
   labels:
-    {{- include "app01.labels" . | nindent 4 }}
+    app: {{ .Values.app_name }}
+    tier: test
 spec:
+  # if your cluster supports it, uncomment the following to automatically create
+  # an external load-balanced IP for the frontend service.
+  #type: LoadBalancer
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: http
-      protocol: TCP
-      name: http
+    # the port that this service should serve on
+  - port: {{ .Values.service.port }}
   selector:
-    {{- include "app01.selectorLabels" . | nindent 4 }}
+    app: {{ .Values.app_name }}
+    tier: test
